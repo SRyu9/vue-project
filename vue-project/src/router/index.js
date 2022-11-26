@@ -3,6 +3,7 @@ import LoginView from '../views/LoginView.vue'
 import HomeView from '../views/HomeView.vue'
 import OrderList from '../views/OrderList.vue'
 import DesignTaskList from '../views/DesignTaskList.vue'
+import DesignCustomize from '../views/DesignCustomize.vue'
 import OrderDetail from '../views/OrderDetail.vue'
 
 import PartBoard from '../views/PartBoard.vue'
@@ -28,6 +29,12 @@ const routes = [
     path: '/design',
     name: 'design',
     component: DesignTaskList,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/project-design',
+    name: 'project-design',
+    component: DesignCustomize,
     meta: { requiresAuth: true }
   },
   {

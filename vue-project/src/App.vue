@@ -53,14 +53,17 @@
   </div>
     
     <router-view/>
-
-
+    <notifications width="30%" position="bottom center"/>
   </v-app>
   
   
 </template>
 
 <script>
+// import {success} from '@/message'
+import { notify } from "@kyvg/vue3-notification";
+
+
 export default {
     data: () => ({
       cards: ['Recently added orders', 'Deadline is coming up soon'],
@@ -73,6 +76,16 @@ export default {
         ['mdi-bell', 'Notifications', '/notifications'],
       ],
     }),
+    mounted: () => {
+      notify({
+        title: "Title",
+        text: "Message",
+        duration: {
+          type: Number,
+          default: 3000,
+        },
+      });
+    }
   }
 </script>
 

@@ -57,7 +57,7 @@
                 variant="flat"
                 :disabled="!isEditing"
                 color="secondary"
-                @click="get_order"
+                @click="edit"
             >
                 Save
             </v-btn>
@@ -76,7 +76,8 @@
 </template>
 
 <script>
- import order_service from '@/service/order'
+//  import order_service from '@/service/order'
+ import message_service from '@/message/index'
 
 
   export default {
@@ -113,12 +114,19 @@
       },
       //api call
       get_order (){
-        const self = this
-        order_service.show(this.$route.query.id).then(function(res){
-          console.log(res);
-          console.log(res.status);
-          self.order = res.data;
-        });
+
+        // const self = this
+        // order_service.show(this.$route.query.id).then(function(res){
+        //   console.log(res);
+        //   console.log(res.status);
+        //   self.order = res.data;
+        // });
+
+        
+      },
+      //api call
+      edit (){
+        message_service.success()
       }
     },
     mounted: function(){
