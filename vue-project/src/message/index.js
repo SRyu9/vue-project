@@ -1,18 +1,18 @@
 import {notify} from '@kyvg/vue3-notification'
 
 export default {
-    success() {
+    success(text) {
         notify({
             type: 'success',
-            title: 'Ttile',
-            text: 'Success',
+            title: 'SUCCESS',
+            text: text,
         })
     },
-    error() {
+    error(text) {
         notify({
             type: 'error',
-            title: 'Ttile',
-            text: 'Erorr',
+            title: 'ERROR',
+            text: text,
         })
     }
   }

@@ -48,9 +48,33 @@
       <v-divider></v-divider>
       <div class="my-5">
         <h3>Part Component</h3>
+        <div>
+          <v-row no-gutters>
+            <v-col
+              cols="12"
+              sm="6"
+              md="8"
+            >
+            </v-col>
+            <v-col
+              cols="6"
+              md="4"
+            >
+            <v-btn
+                variant="outlined"
+                size="large"
+                icon
+                color="info"
+                @click="edit"
+              >
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+            </v-col>
+          </v-row>
+        </div>
       </div>
       <v-table>
-        <thead>
+        <thead v-show="isDisplayHeader">
           <tr>
             <th class="text-left">
               PartId
@@ -58,15 +82,27 @@
             <th class="text-left">
               PartName
             </th>
+            <th class="text-left">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr
-            v-for="item in parts"
+            v-for="item in add_parts"
             :key="item.partId"
           >
             <td>{{ item.partId }}</td>
             <td>{{ item.partName }}</td>
+            <td>
+              <v-btn
+                color="error"
+                variant="plain"
+                @click="delete_part(item.partId)"
+                >
+                Delete
+              </v-btn>
+            </td>
           </tr>
         </tbody>
       </v-table>
@@ -102,15 +138,16 @@
         </thead>
         <tbody>
           <tr
-            v-for="item in search_partboms"
+            v-for="item in filterd_partboms"
             :key="item.partId"
           >
             <td>{{ item.partId }}</td>
             <td>{{ item.partName }}</td>
             <td>
               <v-btn
-                color="primary"
+                color="secondary"
                 prepend-icon="mdi-plus"
+                @click="add_part(item.partId)"
                 >
                 Add
               </v-btn>
@@ -124,13 +161,15 @@
   
   <script>
  import partbom_service from '@/service/partbom'
-
+ import order_service from '@/service/order'
+ import message_service from '@/message/index'
 
 export default {
   data () {
     return {
       hasSaved: false,
       isEditing: null,
+      isDisplayHeader: false,
       model: null,
       states: [
         { name: 'Information', id: 1 },
@@ -142,33 +181,16 @@ export default {
         { name: 'Design',  id: 'DESIGN' },
         { name: 'Production', id: 'PRODUCTION' },
       ],
-      order: [],
-      messages: [
-        {
-          color: 'red',
-          icon: 'mdi-account-multiple',
-          name: 'Social',
-          new: 1,
-          total: 3,
-          title: 'Twitter',
-        },
-        {
-          color: 'teal',
-          icon: 'mdi-calendar',
-          name: 'Promos',
-          new: 2,
-          total: 4,
-          title: 'Shop your way',
-          exceprt: 'New deals available, Join Today',
-        },
+      selected_project:[
+
       ],
       keyward: '',
-      parts: [
+      add_parts: [
 
       ],
       search_partboms: [
 
-      ]
+      ],
     }
   },
   methods: {
@@ -184,23 +206,62 @@ export default {
       this.isEditing = !this.isEditing
       this.hasSaved = true
     },
+    edit: function(){
+      console.log(this.selected_project)
+      message_service.success(this.selected_project.projectNo)
+    },
+    get_project (){
+      const self = this
+      order_service.show(this.$route.query.id).then(function(res){
+        self.selected_project = res.data;
+      });
+    },
     //api call
     fetch_partboms: function(){
         const self = this
         partbom_service.show().then(function(res){
-          console.log(res);
-          console.log(res.status);
           self.search_partboms = res.data;
         });
+    },
+    add_part: function(val){
+      const self = this
+      const partId = val
+      partbom_service.show(partId).then(function(res){
+          self.add_parts.push(res.data)
+      });
+      this.isDisplayHeader = true
+    },
+    delete_part: function(val){
+      const self = this
+      const partId = val
+      var index = this.add_parts.indexOf(partId);
+      self.add_parts.splice(index, 1);
+
+      if(this.add_parts.length == 0){
+        this.isDisplayHeader = false
       }
+    }
   },
-  watch: {
-      keyward: function (val){
-        console.log(val)
+  computed: {
+      filterd_partboms: function (){
+        const self = this
+        if(this.keyward){
+          return this.search_partboms.filter(function(partbom){
+            return partbom.partName.indexOf(self.keyward) !== -1
+          })
+        }else{
+          return this.search_partboms
+        }
       }
   },
   mounted: function(){
+      this.get_project()
       this.fetch_partboms()
+      if(this.add_parts.length == 0){
+        this.isDisplayHeader = false
+      }else{
+        this.isDisplayHeader = true
+      }
     }
 }
 </script>
