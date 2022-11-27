@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 // Add
 var orderRouter = require('./routes/order/order');
+var partBomRouter = require('./routes/partbom/partbom');
 //
 var usersRouter = require('./routes/users');
 
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 // Add
 app.use('/order', orderRouter);
+app.use('/partbom', partBomRouter);
 // Add
 app.use('/users', usersRouter);
 

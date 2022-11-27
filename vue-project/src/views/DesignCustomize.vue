@@ -73,26 +73,57 @@
       <div class="my-3"></div>
       <v-divider></v-divider>
       </div>
-      <div class="mx-5">
-        <v-text-field 
-            v-model="keyward" 
-            label="Search Part Bom"
-            prepend-inner-icon="mdi-magnify">
-
-        </v-text-field>
-      </div>
-      
-      <v-btn
-        color="primary"
-        prepend-icon="mdi-plus"
+      <div class="mx-5 search_bar">
+        <v-icon
+          large
+          color="blue-grey darken-2"
         >
-        Add
-      </v-btn>
+          mdi-magnify
+        </v-icon>
+        <input type="text" id="text2"
+         placeholder="Search Part Bom..."
+         v-model="keyward"
+         >
+      </div>
+      <div class="mx-5">
+        <v-table>
+        <thead>
+          <tr>
+            <th class="text-left">
+              PartId
+            </th>
+            <th class="text-left">
+              PartName
+            </th>
+            <th class="text-left">
+              Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in search_partboms"
+            :key="item.partId"
+          >
+            <td>{{ item.partId }}</td>
+            <td>{{ item.partName }}</td>
+            <td>
+              <v-btn
+                color="primary"
+                prepend-icon="mdi-plus"
+                >
+                Add
+              </v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
+      </div>
     </v-main>
   </template>
   
   <script>
- import order_service from '@/service/order'
+ import partbom_service from '@/service/partbom'
 
 
 export default {
@@ -134,6 +165,9 @@ export default {
       keyward: '',
       parts: [
 
+      ],
+      search_partboms: [
+
       ]
     }
   },
@@ -151,21 +185,50 @@ export default {
       this.hasSaved = true
     },
     //api call
-    get_order (){
-      const self = this
-      order_service.show(this.$route.query.id).then(function(res){
-        console.log(res);
-        console.log(res.status);
-        self.order = res.data;
-      });
-    }
+    fetch_partboms: function(){
+        const self = this
+        partbom_service.show().then(function(res){
+          console.log(res);
+          console.log(res.status);
+          self.search_partboms = res.data;
+        });
+      }
+  },
+  watch: {
+      keyward: function (val){
+        console.log(val)
+      }
   },
   mounted: function(){
-    this.get_order()
-  }
+      this.fetch_partboms()
+    }
 }
 </script>
 
 <style scoped>
+
+.search_bar{
+    display: flex; /*アイコン、テキストボックスを調整する*/
+    align-items: center; /*アイコン、テキストボックスを縦方向の中心に*/
+    justify-content: center; /*アイコン、テキストボックスを横方向の中心に*/
+    height: 50px;
+    width: 70%;
+    background-color: #ddd;
+}
+
+.search_icon{ /*アイコンに一定のスペースを設ける*/
+    height: 15px;
+    width: 15px;
+    padding: 5px 5px;
+}
+
+#text2{
+    font-size: 16px;
+    width: 100%; /*flexの中で100%広げる*/
+    background-color: #ddd;
+    border: none; /*枠線非表示*/
+    outline: none; /*フォーカス時の枠線非表示*/
+    box-sizing: border-box; /*横幅の解釈をpadding, borderまでとする*/
+}
 
 </style>
