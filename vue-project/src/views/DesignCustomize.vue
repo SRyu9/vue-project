@@ -1,25 +1,93 @@
 <template>
     <v-main class="bg-dark-lighten-1">
-        <v-autocomplete
-            v-model="model"
-            v-model:search-input="search"
-            :items="items"
-            chips
-            clearable
-            hide-details
-            hide-selected
-            item-title="name"
-            item-value="symbol"
-            label="Search for a part / bom"
-            variant="solo"
-            >
-        </v-autocomplete>
-        <v-btn
-            color="primary"
-            prepend-icon="mdi-plus"
-            >
-            Add
-        </v-btn>
+      <div class="mx-5" ><span class="text-grey">#1234</span><h1>ProjectA</h1></div>
+      <div class="mx-5">
+        <v-row
+          align="center"
+          class="my-5"
+          no-gutters
+        >
+        <!-- 担当者 -->
+        <v-col
+            cols="4"
+            sm="2"
+            md="1"
+          >
+              <v-icon
+                color="red"
+                icon="mdi-account-multiple"
+              ></v-icon>
+          </v-col>
+          <v-col
+            class="hidden-xs-only text-left ml-2"
+            sm="5"
+            md="3"
+          >
+            <strong>Sales</strong>
+          </v-col>
+          <!-- 期日 -->
+          <v-col
+            cols="4"
+            sm="2"
+            md="1"
+          >
+              <v-icon
+                color="teal"
+                icon="mdi-calendar"
+              ></v-icon>
+          </v-col>
+
+          <v-col
+            class="hidden-xs-only text-left ml-2"
+            sm="5"
+            md="3"
+          >
+            <strong>2022/12/7</strong>
+          </v-col>
+      </v-row>
+      <v-divider></v-divider>
+      <div class="my-5">
+        <h3>Part Component</h3>
+      </div>
+      <v-table>
+        <thead>
+          <tr>
+            <th class="text-left">
+              PartId
+            </th>
+            <th class="text-left">
+              PartName
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in parts"
+            :key="item.partId"
+          >
+            <td>{{ item.partId }}</td>
+            <td>{{ item.partName }}</td>
+          </tr>
+        </tbody>
+      </v-table>
+      <div class="my-3"></div>
+      <v-divider></v-divider>
+      </div>
+      <div class="mx-5">
+        <v-text-field 
+            v-model="keyward" 
+            label="Search Part Bom"
+            prepend-inner-icon="mdi-magnify">
+
+        </v-text-field>
+      </div>
+      
+      <v-btn
+        color="primary"
+        prepend-icon="mdi-plus"
+        >
+        Add
+      </v-btn>
     </v-main>
   </template>
   
@@ -44,6 +112,29 @@ export default {
         { name: 'Production', id: 'PRODUCTION' },
       ],
       order: [],
+      messages: [
+        {
+          color: 'red',
+          icon: 'mdi-account-multiple',
+          name: 'Social',
+          new: 1,
+          total: 3,
+          title: 'Twitter',
+        },
+        {
+          color: 'teal',
+          icon: 'mdi-calendar',
+          name: 'Promos',
+          new: 2,
+          total: 4,
+          title: 'Shop your way',
+          exceprt: 'New deals available, Join Today',
+        },
+      ],
+      keyward: '',
+      parts: [
+
+      ]
     }
   },
   methods: {
