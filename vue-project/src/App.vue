@@ -1,19 +1,51 @@
 <template>
   <v-app>
     <div>
-    <v-toolbar
+      <v-app-bar
+      color="#6A76AB"
       dark
-      prominent
-      image="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
     >
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      <v-spacer></v-spacer>
 
+      <v-toolbar-title>SMIL</v-toolbar-title>
+
+      <v-spacer></v-spacer>
       <v-btn icon>
-        <v-icon>mdi-export</v-icon>
+        <v-icon>mdi-bell</v-icon>
       </v-btn>
-    </v-toolbar>
-  </div>
+
+      <v-avatar color="indigo">
+        <v-icon dark>
+          mdi-account-circle
+        </v-icon>
+      </v-avatar>
+
+      <v-menu
+        left
+        bottom
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+
+        <v-list>
+          <v-list-item
+            v-for="n in 5"
+            :key="n"
+            @click="() => {}"
+          >
+            <v-list-item-title>Option {{ n }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar>
+   </div>
   <div>
     <router-link
         :to="'/login?redirect=' + $route.fullPath"
@@ -21,20 +53,6 @@
        >Login</router-link
       >
     <v-navigation-drawer v-model="drawer">
-      <v-sheet
-        class="pa-4"
-      >
-        <!-- <v-avatar
-          class="mb-4"
-          color="grey-darken-1"
-          size="64"
-        ></v-avatar> -->
-
-        <h1 class="title">SMIL Project</h1>
-      </v-sheet>
-
-      <v-divider></v-divider>
-
       <v-list>
         <v-list-item
           v-for="[icon, text, to] in links"
